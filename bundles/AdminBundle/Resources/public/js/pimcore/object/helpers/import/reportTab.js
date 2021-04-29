@@ -121,7 +121,33 @@ pimcore.object.helpers.import.reportTab = Class.create({
                 viewConfig: {
                     forceFit: false
                 },
-                autoScroll: true
+                autoScroll: true,
+                listeners: {
+                    // Copy error message to clipboard on row click
+                    itemClick: function (grid, rowIndex, columnIndex, event) {
+                        var message = grid.selection.data.message;
+                        if (!message) {
+                            return;
+                        }
+
+                        var el = document.createElement('textarea');
+                        el.value = message;
+                        document.body.appendChild(el);
+                        el.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(el);
+
+                        Ext.create('Ext.window.Toast', {
+                            iconCls: 'pimcore_icon_success',
+                            title: 'Successfully copied',
+                            html: 'Successfully copied message from row ' + rowIndex.data.rowId + ' to clipboard.',
+                            autoShow: true,
+                            width: 400,
+                            height: 128,
+                            autoClose: true,
+                        }).show();
+                    }
+                }
             });
 
             this.importProgressBar = new Ext.ProgressBar({
