@@ -383,7 +383,7 @@ class QuantityValue extends Data implements ResourcePersistenceAwareInterface, Q
         }
 
         if ($this->getMandatory() &&
-            ($data === null || $data->getValue() === null || $data->getUnitId() === null)) {
+            ($data === null || $data->getValue() === null)) {
             throw new Model\Element\ValidationException('Empty mandatory field [ '.$this->getName().' ]');
         }
 

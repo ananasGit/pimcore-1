@@ -68,7 +68,7 @@ class Image extends Model\Asset
                 $this->setCustomSetting('imageDimensionsCalculated', $imageDimensionsCalculated);
             }
 
-            $this->handleEmbeddedMetaData(true, $tmpFile);
+//            $this->handleEmbeddedMetaData(true, $tmpFile);
         }
 
         $this->clearThumbnails();
@@ -76,21 +76,21 @@ class Image extends Model\Asset
         parent::update($params);
 
         // now directly create "system" thumbnails (eg. for the tree, ...)
-        if ($this->getDataChanged()) {
-            try {
-                $path = $this->getThumbnail(Image\Thumbnail\Config::getPreviewConfig())->getFileSystemPath();
-
-                // set the modification time of the thumbnail to the same time from the asset
-                // so that the thumbnail check doesn't fail in Asset\Image\Thumbnail\Processor::process();
-                // we need the @ in front of touch because of some stream wrapper (eg. s3) which don't support touch()
-                @touch($path, $this->getModificationDate());
-
-                $this->generateLowQualityPreview();
-            } catch (\Exception $e) {
-                Logger::error('Problem while creating system-thumbnails for image ' . $this->getRealFullPath());
-                Logger::error($e);
-            }
-        }
+//        if ($this->getDataChanged()) {
+//            try {
+//                $path = $this->getThumbnail(Image\Thumbnail\Config::getPreviewConfig())->getFileSystemPath();
+//
+//                // set the modification time of the thumbnail to the same time from the asset
+//                // so that the thumbnail check doesn't fail in Asset\Image\Thumbnail\Processor::process();
+//                // we need the @ in front of touch because of some stream wrapper (eg. s3) which don't support touch()
+//                @touch($path, $this->getModificationDate());
+//
+//                $this->generateLowQualityPreview();
+//            } catch (\Exception $e) {
+//                Logger::error('Problem while creating system-thumbnails for image ' . $this->getRealFullPath());
+//                Logger::error($e);
+//            }
+//        }
     }
 
     protected function postPersistData()
@@ -455,7 +455,7 @@ EOT;
 
         //try to get the dimensions with getimagesize because it is much faster than e.g. the Imagick-Adapter
         if (is_readable($path)) {
-            $imageSize = getimagesize($path);
+            $imageSize = @getimagesize($path);
             if ($imageSize && $imageSize[0] && $imageSize[1]) {
                 $dimensions = [
                     'width' => $imageSize[0],
