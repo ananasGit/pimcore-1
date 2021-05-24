@@ -393,6 +393,13 @@ class QuantityValue extends Data implements ResourcePersistenceAwareInterface, Q
                 throw new Model\Element\ValidationException('Invalid dimension unit data ' . $this->getName());
             }
         }
+
+        if (!empty($data)) {
+            $value = $data->getValue();
+            if ($value < 0) {
+                throw new Model\Element\ValidationException('Value in field [ '.$this->getName().' ] is not unsigned (bigger than 0)');
+            }
+        }
     }
 
     /**
