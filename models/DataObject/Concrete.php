@@ -161,6 +161,11 @@ class Concrete extends DataObject implements LazyLoadedFieldsInterface
         if ($validationExceptions) {
             $message = 'Validation failed: ';
             $errors = [];
+
+            if (method_exists($this, 'getEan') && method_exists($this, 'getName')) {
+                $message .= "[EAN: {$this->getEan()} | Product name: {$this->getName()}] ";
+            }
+
             /** @var \Exception $e */
             foreach ($validationExceptions as $e) {
                 $msg = $e->getMessage();

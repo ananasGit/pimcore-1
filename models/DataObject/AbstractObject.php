@@ -701,7 +701,15 @@ class AbstractObject extends Model\Element\AbstractElement
                     self::setHideUnpublished($hideUnpublishedBackup);
 
                     if ($e instanceof UniqueConstraintViolationException) {
-                        throw new Element\ValidationException('unique constraint violation', 0, $e);
+                        $message = 'Validation failed: ';
+
+                        if (method_exists($this, 'getEan') && method_exists($this, 'getName')) {
+                            $message .= "[EAN: {$this->getEan()} | Product name: {$this->getName()}] ";
+                        }
+
+                        $message .= 'unique constraint violation';
+
+                        throw new Element\ValidationException($message, 0, $e);
                     }
 
                     if ($e instanceof RetryableException) {
