@@ -397,7 +397,7 @@ class QuantityValue extends Data implements ResourcePersistenceAwareInterface, Q
         if (!empty($data)) {
             $value = $data->getValue();
             if ($value < 0) {
-                throw new Model\Element\ValidationException('Value in field [ '.$this->getName().' ] is not unsigned (bigger than 0)');
+                throw new Model\Element\ValidationException('Value in field [ '.$this->getName().' ] can not be negative.');
             }
         }
     }
