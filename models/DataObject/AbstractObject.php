@@ -15,7 +15,6 @@
 
 namespace Pimcore\Model\DataObject;
 
-use AppBundle\Model\DataObject\BaseProduct;
 use Doctrine\DBAL\Exception\RetryableException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Pimcore\Cache;
