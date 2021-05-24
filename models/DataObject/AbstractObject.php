@@ -15,6 +15,7 @@
 
 namespace Pimcore\Model\DataObject;
 
+use AppBundle\Model\DataObject\BaseProduct;
 use Doctrine\DBAL\Exception\RetryableException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Pimcore\Cache;
@@ -701,7 +702,15 @@ class AbstractObject extends Model\Element\AbstractElement
                     self::setHideUnpublished($hideUnpublishedBackup);
 
                     if ($e instanceof UniqueConstraintViolationException) {
-                        throw new Element\ValidationException('unique constraint violation', 0, $e);
+                        $message = 'Validation failed: ';
+
+                        if ($this instanceof BaseProduct) {
+                            $message .= "[EAN: {$this->getEan()} | Product name: {$this->getName()}] ";
+                        }
+
+                        $message .= 'unique constraint violation';
+
+                        throw new Element\ValidationException($message, 0, $e);
                     }
 
                     if ($e instanceof RetryableException) {

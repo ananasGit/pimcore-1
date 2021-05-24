@@ -15,6 +15,7 @@
 
 namespace Pimcore\Model\DataObject;
 
+use AppBundle\Model\DataObject\BaseProduct;
 use Pimcore\Db;
 use Pimcore\Event\DataObjectEvents;
 use Pimcore\Event\Model\DataObjectEvent;
@@ -161,6 +162,11 @@ class Concrete extends DataObject implements LazyLoadedFieldsInterface
         if ($validationExceptions) {
             $message = 'Validation failed: ';
             $errors = [];
+
+            if ($this instanceof BaseProduct) {
+                $message .= "[EAN: {$this->getEan()} | Product name: {$this->getName()}] ";
+            }
+
             /** @var \Exception $e */
             foreach ($validationExceptions as $e) {
                 $msg = $e->getMessage();
