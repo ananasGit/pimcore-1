@@ -484,9 +484,9 @@ class BooleanSelect extends Data implements
      */
     public function getFromCsvImport($importValue, $object = null, $params = [])
     {
-        if ($importValue === '1') {
+        if ($importValue === '1' || $importValue === $this->yesLabel) {
             $value = true;
-        } elseif ($importValue === '0') {
+        } elseif ($importValue === '0' || $importValue === $this->noLabel) {
             $value = false;
         } else {
             $value = null;
