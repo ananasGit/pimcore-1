@@ -2189,6 +2189,10 @@ class AssetController extends ElementControllerBase implements EventedController
                     if ($zip->extractTo($tmpDir . '/', $path)) {
                         $tmpFile = $tmpDir . '/' . preg_replace('@^/@', '', $path);
 
+                        if (!is_file($tmpFile) || substr($path, 0, 9) === "__MACOSX/") {
+                            continue;
+                        }
+
                         $filename = Element\Service::getValidKey(basename($path), 'asset');
 
                         $relativePath = '';
