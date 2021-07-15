@@ -1045,7 +1045,13 @@ class DataObjectHelperController extends AdminController
                 $description = $configData['shareSettings']['configDescription'];
                 $importConfig->setName($name);
                 $importConfig->setDescription($description);
-                $importConfig->setShareGlobally($configData['shareSettings']['shareGlobally'] && $this->getAdminUser()->isAdmin());
+
+                // @see https://htecgroup.atlassian.net/browse/AMT-1156
+                if ($this->getAdminUser()->isAdmin()) {
+                    $importConfig->setShareGlobally((bool) $configData['shareSettings']['shareGlobally']);
+                } else {
+                    $importConfig->setShareGlobally(true);
+                }
             }
 
             $configDataEncoded = json_encode($configData);
