@@ -382,6 +382,10 @@ class QuantityValue extends Data implements ResourcePersistenceAwareInterface, Q
             return;
         }
 
+        if (is_numeric($data) && is_infinite($data)) {
+            throw new Model\Element\ValidationException('Invalid dimension unit data ' . $this->getName());
+        }
+
         if ($this->getMandatory() &&
             ($data === null || $data->getValue() === null)) {
             throw new Model\Element\ValidationException('Empty mandatory field [ '.$this->getName().' ]');
@@ -389,7 +393,7 @@ class QuantityValue extends Data implements ResourcePersistenceAwareInterface, Q
 
         if (!empty($data)) {
             $value = $data->getValue();
-            if ((!empty($value) && !is_numeric($data->getValue()))) {
+            if ((!empty($value) && !is_numeric($value))) {
                 throw new Model\Element\ValidationException('Invalid dimension unit data ' . $this->getName());
             }
         }
@@ -428,10 +432,19 @@ class QuantityValue extends Data implements ResourcePersistenceAwareInterface, Q
      * @param null|Model\DataObject\Concrete $object
      * @param array $params
      *
-     * @return Model\DataObject\Data\QuantityValue|null
+     * @return Model\DataObject\Data\QuantityValue|float|null
      */
     public function getFromCsvImport($importValue, $object = null, $params = [])
     {
+        if (!$importValue) {
+            return null;
+        }
+
+        $number = str_replace(',', '.', $importValue);
+        if (!is_numeric($number)) {
+            return INF;
+        }
+
         if (strpos($importValue, '_') !== false) {
             [$number, $unitId] = explode('_', $importValue);
             $number = (float) str_replace(',', '.', $number);
@@ -447,13 +460,7 @@ class QuantityValue extends Data implements ResourcePersistenceAwareInterface, Q
             return new Model\DataObject\Data\QuantityValue($number, $unit);
         }
 
-        if ($importValue) {
-            $number = (float)str_replace(',', '.', $importValue);
-
-            return new Model\DataObject\Data\QuantityValue($number);
-        }
-
-        return null;
+        return new Model\DataObject\Data\QuantityValue((float)$number);
     }
 
     /**
