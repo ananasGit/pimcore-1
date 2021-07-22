@@ -68,7 +68,7 @@ class LibreOffice extends Ghostscript
      */
     public static function getLibreOfficeCli()
     {
-        return \Pimcore\Tool\Console::getExecutable('soffice', true);
+        return \Pimcore\Tool\Console::getExecutable('soffice', false);
     }
 
     /**
