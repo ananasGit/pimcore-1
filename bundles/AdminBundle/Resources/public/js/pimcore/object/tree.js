@@ -273,10 +273,10 @@ pimcore.object.tree = Class.create({
         var tree = node.getOwnerTree();
 
         //dropping variants only allowed in the same parent
-        if(node.data.type == 'variant' && oldParent.data.id != newParent.data.id){
-            pimcore.helpers.showNotification(t("error"), t("element_cannot_be_moved"), "error");
-            return false;
-        }
+        // if(node.data.type == 'variant' && oldParent.data.id != newParent.data.id){
+        //     pimcore.helpers.showNotification(t("error"), t("element_cannot_be_moved"), "error");
+        //     return false;
+        // }
 
         if(newParent.data.id == oldParent.data.id && oldParent.data.sortBy != 'index') {
             pimcore.helpers.showNotification(t("error"), t("element_cannot_be_moved"), "error");
