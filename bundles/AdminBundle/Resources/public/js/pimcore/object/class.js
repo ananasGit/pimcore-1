@@ -12,6 +12,7 @@
  */
 
 pimcore.registerNS("pimcore.object.klass");
+Ext.override(Ext.data.proxy.Ajax, { timeout: 300000 });
 pimcore.object.klass = Class.create({
 
     forbiddenNames: [
