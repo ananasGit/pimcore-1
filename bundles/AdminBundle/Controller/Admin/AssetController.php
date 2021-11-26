@@ -152,12 +152,14 @@ class AssetController extends ElementControllerBase implements EventedController
         } elseif ($asset instanceof Asset\Image) {
             $imageInfo = [];
 
-            $previewUrl = $this->generateUrl('pimcore_admin_asset_getimagethumbnail', [
-                'id' => $asset->getId(),
-                'treepreview' => true,
-                'hdpi' => true,
-                '_dc' => time(),
-            ]);
+//            $previewUrl = $this->generateUrl('pimcore_admin_asset_getimagethumbnail', [
+//                'id' => $asset->getId(),
+//                'treepreview' => true,
+//                'hdpi' => true,
+//                '_dc' => time(),
+//            ]);
+
+            $previewUrl = $this->getProductThumbnailPath($asset);
 
             if ($asset->isAnimated()) {
                 $previewUrl = $this->generateUrl('pimcore_admin_asset_getasset', [
@@ -1732,6 +1734,8 @@ class AssetController extends ElementControllerBase implements EventedController
                     $filenameDisplay = substr($filenameDisplay, 0, 25) . '...' . \Pimcore\File::getFileExtension($filenameDisplay);
                 }
 
+                $thumbnailPath = $this->getProductThumbnailPath($asset);
+
                 // Like for treeGetChildsByIdAction, so we respect isAllowed method which can be extended (object DI) for custom permissions, so relying only users_workspaces_asset is insufficient and could lead security breach
                 if ($asset->isAllowed('list')) {
                     $assets[] = [
@@ -1739,7 +1743,7 @@ class AssetController extends ElementControllerBase implements EventedController
                         'type' => $asset->getType(),
                         'filename' => $asset->getFilename(),
                         'filenameDisplay' => htmlspecialchars($filenameDisplay),
-                        'url' => $this->getThumbnailUrl($asset, true, true),
+                        'url' => $thumbnailPath,
                         'idPath' => $data['idPath'] = Element\Service::getIdPath($asset),
                     ];
                 }
@@ -2689,5 +2693,24 @@ class AssetController extends ElementControllerBase implements EventedController
     public function onKernelResponse(FilterResponseEvent $event)
     {
         // nothing to do
+    }
+
+    /**
+     * @param Asset\Image $asset
+     * @return string
+     */
+    private function getProductThumbnailPath($asset)
+    {
+        $thumbnail = $asset->getThumbnail('product_thumbnail');
+        $thumbnailPath = str_replace($_ENV['PIMCORE_TRANSFORMED_TMP_URL'], '', $thumbnail->getPath());
+        if (strpos($thumbnailPath, '/tmp/image-thumbnails') === false) {
+            $thumbnailPath = '/tmp/image-thumbnails' . $thumbnailPath;
+        }
+
+        if ($_ENV['AWS_S3_BUCKET_NAME']) {
+            $thumbnailPath = sprintf("https://%s%s", $_ENV['AWS_S3_BUCKET_NAME'], $thumbnailPath);
+        }
+
+        return $thumbnailPath;
     }
 }
