@@ -109,9 +109,9 @@ pimcore.helpers.grid.buildDefaultPagingToolbar = function (store, options) {
             store: [
                 [25, "25"],
                 [50, "50"],
-                [100, "100"],
-                [200, "200"],
-                [999999, t("all")]
+                // [100, "100"],
+                // [200, "200"],
+                // [999999, t("all")]
             ],
             mode: "local",
             width: 80,
