@@ -938,5 +938,9 @@
   "preview_item": "Preview Item",
   "version_currently_saved_in_database": "Currently saved in database (but not published)",
   "preview_item": "Preview Item",
-  "deprecated_feature": "<p style='color: orange;'>Deprecated feature. Use %s<br>instead</p>"
+  "deprecated_feature": "<p style='color: orange;'>Deprecated feature. Use %s<br>instead</p>",
+  "filter_by_relation": "Filter by relation",
+  "filter_by_relation_field": "Filter by relation field",
+  "clear_relation_filter": "Clear active relation filter",
+  "apply_filter": "Apply filter"
 }
