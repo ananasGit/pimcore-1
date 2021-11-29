@@ -2704,7 +2704,7 @@ class AssetController extends ElementControllerBase implements EventedController
         $path = $asset->getRealFullPath();
 
         if ($_ENV['AWS_S3_BUCKET_NAME']) {
-            $path = sprintf("https://%s%s%s", 'static.ananas.rs', $_ENV['DEFAULT_ASSET_DIRECTORY'], $path);
+            $path = sprintf("https://%s%s%s", $_ENV['AWS_S3_BUCKET_NAME'], $_ENV['DEFAULT_ASSET_DIRECTORY'], $path);
         }
 
         return $path;
