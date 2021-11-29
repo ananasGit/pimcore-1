@@ -159,7 +159,7 @@ class AssetController extends ElementControllerBase implements EventedController
 //                '_dc' => time(),
 //            ]);
 
-            $previewUrl = $this->getProductThumbnailPath($asset);
+            $previewUrl = $this->getImagePreviewPath($asset);
 
             if ($asset->isAnimated()) {
                 $previewUrl = $this->generateUrl('pimcore_admin_asset_getasset', [
@@ -1734,7 +1734,7 @@ class AssetController extends ElementControllerBase implements EventedController
                     $filenameDisplay = substr($filenameDisplay, 0, 25) . '...' . \Pimcore\File::getFileExtension($filenameDisplay);
                 }
 
-                $thumbnailPath = $this->getProductThumbnailPath($asset);
+                $thumbnailPath = $this->getImagePreviewPath($asset);
 
                 // Like for treeGetChildsByIdAction, so we respect isAllowed method which can be extended (object DI) for custom permissions, so relying only users_workspaces_asset is insufficient and could lead security breach
                 if ($asset->isAllowed('list')) {
@@ -2699,18 +2699,14 @@ class AssetController extends ElementControllerBase implements EventedController
      * @param Asset\Image $asset
      * @return string
      */
-    private function getProductThumbnailPath($asset)
+    private function getImagePreviewPath($asset)
     {
-        $thumbnail = $asset->getThumbnail('product_thumbnail');
-        $thumbnailPath = str_replace($_ENV['PIMCORE_TRANSFORMED_TMP_URL'], '', $thumbnail->getPath());
-        if (strpos($thumbnailPath, '/tmp/image-thumbnails') === false) {
-            $thumbnailPath = '/tmp/image-thumbnails' . $thumbnailPath;
-        }
+        $path = $asset->getRealFullPath();
 
         if ($_ENV['AWS_S3_BUCKET_NAME']) {
-            $thumbnailPath = sprintf("https://%s%s", $_ENV['AWS_S3_BUCKET_NAME'], $thumbnailPath);
+            $path = sprintf("https://%s%s%s", 'static.ananas.rs', $_ENV['DEFAULT_ASSET_DIRECTORY'], $path);
         }
 
-        return $thumbnailPath;
+        return $path;
     }
 }
