@@ -368,6 +368,12 @@ pimcore.element.selector.object = Class.create(pimcore.element.selector.abstract
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
+                },
+                actionMethods: {
+                    create: 'POST',
+                    read: 'POST',
+                    update: 'POST',
+                    destroy: 'POST'
                 }
             },
             fields: ["id","fullpath","type","subtype","filename",{name:"classname",convert: function(v, rec){
