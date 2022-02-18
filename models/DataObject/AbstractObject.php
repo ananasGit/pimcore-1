@@ -703,8 +703,10 @@ class AbstractObject extends Model\Element\AbstractElement
                     if ($e instanceof UniqueConstraintViolationException) {
                         $message = 'Validation failed: ';
 
-                        if (method_exists($this, 'getEan') && method_exists($this, 'getName')) {
+                        if (method_exists($this, 'getEan') && method_exists($this, 'getName') && $this->getEan()) {
                             $message .= "[EAN: {$this->getEan()} | Product name: {$this->getName()}] ";
+                        } else if(method_exists($this, 'getAcode') && method_exists($this, 'getName') && $this->getAcode()) {
+                            $message .= "[ACODE: {$this->getAcode()} | Product name: {$this->getName()}] ";
                         }
 
                         $message .= 'unique constraint violation';
